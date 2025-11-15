@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-2"><div class="card summary-card"><div class="icon">📄</div><div class="value">{{ resumen.total }}</div><div class="label">Total de Multas</div></div></div>
+    <div class="col-md-2"><div class="card summary-card"><div class="icon">⚠️</div><div class="value">{{ resumen.pendientes }} </div><div class="label">Pendientes</div></div></div>
+    <div class="col-md-2"><div class="card summary-card"><div class="icon">✅</div><div class="value">{{ resumen.pagadas }} </div><div class="label">Pagadas</div></div></div>
+    <div class="col-md-2"><div class="card summary-card"><div class="icon">💰</div><div class="value">${{ resumen.recaudado }}</div><div class="label">Recaudado</div></div></div>
+</div>
+
+<div class="banner-mensaje" style="margin-bottom: 18px;">
+    <div class="banner-icono">✔</div>
+    <div class="banner-texto">
+        <span class="titulo">Mantén tus pagos al día</span><br>
+        <span class="sub">y evita intereses. Cada acción cuenta para conducir con tranquilidad.</span>
+    </div>
+</div>
+
+
+<div class="card p-3 mb-3">
+    <form method="get" class="d-flex gap-2 align-items-start flex-wrap">
+        <div style="flex: 1; min-width: 250px;">
+            <input 
+                type="text" 
+                name="busqueda" 
+                value="{{ busqueda }}" 
+                class="form-control" 
+                placeholder="🔍 Buscar por placa o fecha"
+                id="campoBusqueda"
+            >
+            <small class="text-muted d-block mt-1">
+                Ej: ABC-123 o 2024-11-10, 10-11-2024, 10/11/2024
+            </small>
+        </div>
+        
+        <input type="hidden" name="filtro" value="{{ filtro }}" id="filtroActual">
+        
+        <div class="filter-buttons btn-group">
+            <button type="button" onclick="setFiltro('todas')" class="btn {% if filtro == 'todas' %}active{% endif %}">Todas</button>
+            <button type="button" onclick="setFiltro('pendientes')" class="btn {% if filtro == 'pendientes' %}active{% endif %}">Pendientes</button>
+            <button type="button" onclick="setFiltro('pagadas')" class="btn {% if filtro == 'pagadas' %}active{% endif %}">Pagadas</button>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        
+        {% if busqueda or filtro != 'todas' %}
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary" title="Limpiar filtros">✖</a>
+        {% endif %}
+    </form>
+    
+    {% if busqueda %}
+    <div class="alert alert-info mt-3 mb-0 py-2">
+        <strong>Buscando:</strong> "{{ busqueda }}" 
+        {% if filtro != 'todas' %}| <strong>Estado:</strong> {{ filtro|title }}{% endif %}
+        | <strong>Resultados:</strong> {{ multas.count }}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function setFiltro(valor) {
+    document.getElementById('filtroActual').value = valor;
+    // Actualizar visualmente cuál está activo
+    document.querySelectorAll('.filter-buttons button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    // Submit automático del form
+    event.target.closest('form').submit();
+}
+</script>
+
+{% include "admin/tabla_multas.html" %}
+{% endblock %}

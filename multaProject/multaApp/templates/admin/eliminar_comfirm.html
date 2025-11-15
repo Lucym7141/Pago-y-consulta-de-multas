@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4" style="max-width:600px;margin:0 auto;text-align:center;">
+    <h4>Confirmar eliminación</h4>
+    <p>¿Deseas eliminar la multa <strong>{{ multa.numero_multa }}</strong> ({{ multa.placa }})?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Sí, eliminar</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

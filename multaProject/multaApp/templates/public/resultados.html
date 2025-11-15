@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="card p-4 shadow-sm" style="max-width:1000px;margin:2rem auto; border-radius:12px;">
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">📋 Resultados de la búsqueda</h3>
+        <a href="{% url 'consulta' %}" class="btn btn-outline-primary">
+            ← Nueva búsqueda
+        </a>
+    </div>
+
+    <!-- Info de búsqueda -->
+    <div class="alert alert-info d-flex align-items-center">
+        <span style="font-size:1.5rem; margin-right:10px;">🔍</span>
+        <div>
+            <strong>Placa consultada:</strong> {{ q }}
+        </div>
+    </div>
+
+    {% if resultados %}
+        <!-- Badge con total -->
+        <div class="mb-3">
+            <span class="badge bg-primary" style="font-size:1rem; padding:8px 15px;">
+                Se encontraron {{ resultados.count }} multa(s)
+            </span>
+        </div>
+
+        <!-- Tabla de resultados -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>N° Multa</th>
+                        <th>Placa</th>
+                        <th>Conductor</th>
+                        <th>Infracción</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for multa in resultados %}
+                    <tr>
+                        <td><strong>{{ multa.numero_multa }}</strong></td>
+                        <td>
+                            <span class="badge bg-secondary" style="font-size:0.9rem;">
+                                {{ multa.placa }}
+                            </span>
+                        </td>
+                        <td>{{ multa.conductor|default:"No registrado" }}</td>
+                        <td>
+                            {{ multa.infraccion }}
+                            {% if multa.codigo %}
+                                <br><small class="text-muted">Código: {{ multa.codigo }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ multa.fecha|date:"d/m/Y" }}</td>
+                        <td><strong style="color:#2c5282;">${{ multa.valor }}</strong></td>
+                        <td>
+                            {% if multa.estado == "Pagada" %}
+                                <span class="badge bg-success">✓ Pagada</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">⚠ Pendiente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if multa.estado == "Pendiente" %}
+                                <a href="{% url 'pagar_multa' multa.id %}" class="btn btn-success btn-sm">
+                                    💳 Pagar
+                                </a>
+                            {% else %}
+                                <span class="text-muted small">Ya pagada</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Resumen inferior -->
+        <div class="card mt-3" style="background:#f8f9fa; border:none;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Total multas:</strong> {{ resultados.count }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Pendientes:</strong> 
+                        <span class="text-warning">{{ pendientes_count }}</span>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <strong>Monto total:</strong> 
+                        <span style="color:#e53e3e; font-size:1.1rem;">${{ total_monto }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aviso de multas pendientes -->
+        {% if pendientes_count > 0 %}
+        <div class="alert alert-warning mt-3 d-flex align-items-center">
+            <span style="font-size:1.5rem; margin-right:10px;">⚠️</span>
+            <div>
+                <strong>Atención:</strong> Tienes {{ pendientes_count }} multa(s) pendiente(s) de pago.
+                <br>
+                <small>💳 Puedes realizar el pago de forma segura haciendo clic en el botón "Pagar".</small>
+            </div>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <!-- Sin resultados -->
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <img src="{% static 'multaApp/img/lupa.png' %}" 
+                     width="100" height="100" 
+                     alt="Sin resultados"
+                     style="opacity:0.4;">
+            </div>
+            <h4 class="text-success mb-3">😊 ¡Excelente noticia!</h4>
+            <p class="text-muted mb-4" style="font-size:1.1rem;">
+                No se encontraron multas para la placa <strong>{{ q }}</strong>
+            </p>
+            <div class="alert alert-success" style="max-width:600px; margin:0 auto;">
+                ✓ Tu vehículo no tiene multas registradas en el sistema
+            </div>
+            <a href="{% url 'consulta' %}" class="btn btn-primary mt-4">
+                Consultar otra placa
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
