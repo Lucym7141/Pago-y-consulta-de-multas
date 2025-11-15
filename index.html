@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultasClear - Consulta y Pago de Multas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #dc2626 100%);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translate(0, 0px); }
+            50% { transform: translate(0, -15px); }
+            100% { transform: translate(0, -0px); }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a 0%, #dc2626 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+        }
+
+        .bg-pattern {
+            background-color: #ffffff;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.1) 0%, transparent 40%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glow:hover {
+            box-shadow: 0 0 25px rgba(30, 58, 138, 0.3);
+        }
+        
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #dc2626 100%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .decoration-triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .mission-vision-card {
+            transition: all 0.3s ease;
+            border-top: 4px solid;
+        }
+        
+        .mission-vision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-pattern">
+
+    <!-- HEADER -->
+    <header class="glass-card shadow-lg py-4 px-6 flex justify-between items-center sticky top-0 z-10 mx-6 mt-4">
+        <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-r from-blue-800 to-red-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
+                <i class="fas fa-gavel text-white text-xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-800 to-red-600 bg-clip-text text-transparent">MultasClear</h1>
+        </div>
+        <nav class="space-x-4">
+            <a href="login.html" class="text-blue-800 font-medium hover:text-red-600 transition duration-300">Iniciar Sesión</a>
+            <a href="signup.html" class="btn-primary px-5 py-2.5 rounded-xl font-medium">Registrarse</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="gradient-bg text-white py-20 px-6 relative overflow-hidden rounded-3xl mx-6 mt-8">
+        <!-- Figuras decorativas -->
+        <div class="decoration-circle w-40 h-40 -top-10 -left-10"></div>
+        <div class="decoration-circle w-32 h-32 bottom-10 right-20"></div>
+        <div class="decoration-triangle border-l-[60px] border-l-transparent border-b-[100px] border-b-red-600 top-20 right-10"></div>
+        
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-5xl font-bold mb-6 leading-tight">Consulta y Pago de Multas <span class="text-white">al Instante</span></h2>
+                <p class="text-xl opacity-95 mb-8 max-w-lg font-medium">
+                    Una plataforma <span class="font-bold">segura, moderna y eficiente</span> para gestionar tus obligaciones legales sin complicaciones.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="login.html" class="bg-white text-blue-800 px-8 py-4 rounded-xl font-bold text-lg inline-block hover:bg-gray-100 transition shadow-lg text-center glow">
+                        Ingresar al Sistema
+                    </a>
+                    <a href="#servicios" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg inline-block hover:bg-white hover:bg-opacity-20 transition text-center">
+                        Conocer Servicios
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative">
+                    <img 
+                        src="https://cdn3d.iconscout.com/3d/premium/thumb/traffic-police-3d-illustration-download-in-png-blend-fbx-gltf-formats--pack-people-3d-illustrations-people-3d-icons-6136370.png?f=webp"
+                        alt="Agente de tránsito"
+                        class="w-80 floating"
+                    />
+                    <div class="absolute -bottom-6 -left-6 bg-white text-blue-800 py-3 px-5 rounded-xl shadow-lg font-bold glow">
+                        ¡Rápido y Seguro!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <!-- QUIÉNES SOMOS -->
+        <div class="glass-card rounded-2xl shadow-lg p-8 mb-16 border-l-4 border-blue-600 transform transition duration-300 hover:scale-105">
+            <div class="flex items-center mb-6">
+                <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mr-5 shadow-md">
+                    <i class="fas fa-building text-white text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-blue-700">Quiénes Somos</h2>
+            </div>
+            <p class="text-gray-700 text-lg">
+                <b class="text-blue-600">MultasClear</b> es una empresa líder en soluciones tecnológicas orientadas a la consulta, administración y pago de multas de tránsito. Nuestro objetivo es ofrecer un sistema accesible, rápido y completamente confiable, disponible 24/7 para todos los usuarios.
+            </p>
+        </div>
+
+        <!-- MISIÓN Y VISIÓN -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- MISIÓN -->
+            <div class="mission-vision-card glass-card rounded-2xl shadow-lg p-8 border-t-blue-500">
+                <div class="flex items-center mb-6">
+                    <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mr-5 shadow-md">
+                        <i class="fas fa-bullseye text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-blue-700">Misión</h2>
+                </div>
+                <p class="text-gray-700 text-lg">
+                    Proporcionar una experiencia digital eficiente que permita a los ciudadanos consultar y gestionar sus infracciones de tránsito de forma sencilla, transparente y segura, sin filas, sin demoras y sin complicaciones.
+                </p>
+            </div>
+
+            <!-- VISIÓN -->
+            <div class="mission-vision-card glass-card rounded-2xl shadow-lg p-8 border-t-red-500">
+                <div class="flex items-center mb-6">
+                    <div class="w-14 h-14 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center mr-5 shadow-md">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-red-700">Visión</h2>
+                </div>
+                <p class="text-gray-700 text-lg">
+                    Convertirnos en la plataforma número uno en Latinoamérica para la gestión de obligaciones de tránsito, impulsando la modernización de los servicios legales mediante tecnología de vanguardia.
+                </p>
+            </div>
+        </div>
+
+        <!-- SERVICIOS -->
+        <div class="mb-16" id="servicios">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Nuestros Servicios</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Ofrecemos soluciones completas para la gestión de tus multas de tránsito</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-search text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Consulta de Multas</h3>
+                    <p class="text-gray-600 text-lg">Consulta tus multas por documento de identidad de forma rápida y sencilla.</p>
+                </div>
+
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-credit-card text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Pago en Línea</h3>
+                    <p class="text-gray-600 text-lg">Paga tus multas de manera segura con múltiples métodos de pago disponibles.</p>
+                </div>
+
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-history text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Historial Completo</h3>
+                    <p class="text-gray-600 text-lg">Accede a tu historial completo de infracciones y pagos realizados.</p>
+                </div>
+
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-file-download text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Comprobantes</h3>
+                    <p class="text-gray-600 text-lg">Descarga comprobantes de pago y reportes de tus transacciones.</p>
+                </div>
+
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-clock text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Disponibilidad 24/7</h3>
+                    <p class="text-gray-600 text-lg">Nuestra plataforma está disponible las 24 horas del día, los 7 días de la semana.</p>
+                </div>
+
+                <div class="service-card glass-card rounded-2xl shadow-md p-8 border border-gray-100 glow">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center mb-6 shadow-md">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Seguridad Garantizada</h3>
+                    <p class="text-gray-600 text-lg">Tus datos y transacciones están protegidos con los más altos estándares de seguridad.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TESTIMONIOS -->
+        <div class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Lo que dicen nuestros usuarios</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Miles de usuarios confían en nosotros para gestionar sus multas</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" class="w-14 h-14 rounded-full mr-4 border-4 border-blue-100">
+                        <div>
+                            <h4 class="font-bold text-lg">María González</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Pagué mi multa en menos de 5 minutos. ¡Increíblemente fácil y rápido! Definitivamente recomiendo MultasClear."</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" class="w-14 h-14 rounded-full mr-4 border-4 border-red-100">
+                        <div>
+                            <h4 class="font-bold text-lg">Carlos Rodríguez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"La plataforma es muy intuitiva. Pude consultar y pagar mis multas sin problemas a cualquier hora del día."</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Usuario" class="w-14 h-14 rounded-full mr-4 border-4 border-blue-100">
+                        <div>
+                            <h4 class="font-bold text-lg">Laura Martínez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Me encanta poder descargar los comprobantes de pago. Todo queda registrado y es muy fácil de seguir."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA FINAL -->
+        <div class="glass-card rounded-3xl p-12 text-center text-white shadow-2xl relative overflow-hidden bg-gradient-to-r from-blue-800 to-red-700">
+            <!-- Figuras decorativas -->
+            <div class="decoration-circle w-32 h-32 -top-8 -left-8 bg-white opacity-20"></div>
+            <div class="decoration-circle w-40 h-40 -bottom-10 -right-10 bg-white opacity-20"></div>
+            <div class="decoration-triangle border-l-[80px] border-l-transparent border-b-[140px] border-b-white top-10 right-20 opacity-20"></div>
+            <div class="decoration-triangle border-r-[60px] border-r-transparent border-t-[100px] border-t-white bottom-10 left-20 opacity-20"></div>
+            
+            <div class="relative z-10">
+                <h2 class="text-4xl font-bold mb-6">¿Listo para consultar tus multas?</h2>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">Simplifica la gestión de tus obligaciones de tránsito con nuestra plataforma segura y eficiente.</p>
+                <a href="login.html" class="bg-white text-blue-800 px-10 py-4 rounded-xl font-bold text-xl inline-block hover:bg-gray-100 transition shadow-lg glow">
+                    Ingresar al Sistema
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 px-6 mt-20 rounded-t-3xl">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div>
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-red-600 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-gavel text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">MultasClear</h3>
+                </div>
+                <p class="text-gray-400">Plataforma líder en consulta y pago de multas de tránsito en Latinoamérica.</p>
+                <div class="flex space-x-4 mt-6">
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-500 transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-red-500 transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-6">Enlaces Rápidos</h3>
+                <ul class="space-y-3">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white transition">Inicio</a></li>
+                    <li><a href="#servicios" class="text-gray-400 hover:text-white transition">Servicios</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Preguntas Frecuentes</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Contacto</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-6">Servicios</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li>Consulta de Multas</li>
+                    <li>Pago en Línea</li>
+                    <li>Historial Completo</li>
+                    <li>Descarga de Comprobantes</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-6">Contáctanos</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li class="flex items-start">
+                        <i class="fas fa-envelope mr-3 mt-1 text-blue-400"></i>
+                        <span>info@multasclear.com</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-phone mr-3 mt-1 text-red-400"></i>
+                        <span>+1 234 567 890</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-3 mt-1 text-white"></i>
+                        <span>Ciudad, País</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto border-t border-gray-700 mt-10 pt-6 text-center text-gray-400">
+            <p>&copy; 2023 MultasClear. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
