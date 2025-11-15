@@ -19,6 +19,7 @@ def consulta(request):
 
 
 # Vista pública: muestra los resultados de la búsqueda por placa
+# NO filtra por archivada, muestra TODAS las multas
 def resultados_consulta(request):
     q = request.GET.get("q", "").strip().upper()
     resultados = Multa.objects.none()
@@ -26,6 +27,7 @@ def resultados_consulta(request):
     pendientes_count = 0
     
     if q:
+        # NO filtramos por archivada=False, mostramos todas
         resultados = Multa.objects.filter(placa__icontains=q)
         total_monto = sum(multa.valor for multa in resultados)
         pendientes_count = resultados.filter(estado="Pendiente").count()
@@ -48,9 +50,6 @@ def pagar_multa(request, id):
         return redirect('resultados_consulta') + f'?q={multa.placa}'
     
     if request.method == "POST":
-        # Aquí se procesaría el pago real (pasarela de pago, etc.)
-        # Por ahora, simplemente marcamos como pagada
-        
         multa.estado = "Pagada"
         multa.save()
         
@@ -70,12 +69,13 @@ def confirmacion_pago(request, id):
     })
 
 
-# Admin dashboard
+# Admin dashboard - SOLO muestra multas NO archivadas
 def dashboard(request):
     filtro = request.GET.get("filtro", "todas")
     busqueda = request.GET.get("busqueda", "").strip()
 
-    multas = Multa.objects.all()
+    # Filtrar solo multas NO archivadas
+    multas = Multa.objects.filter(archivada=False)
 
     if busqueda:
         # Intentar detectar si es una fecha
@@ -90,10 +90,8 @@ def dashboard(request):
                 continue
         
         if fecha_obj:
-            # Si es una fecha válida, buscar por fecha
             multas = multas.filter(fecha=fecha_obj)
         else:
-            # Si no es fecha, buscar por placa, conductor, infracción, número de multa
             multas = multas.filter(
                 Q(placa__icontains=busqueda) |
                 Q(conductor__icontains=busqueda) |
@@ -106,12 +104,13 @@ def dashboard(request):
     elif filtro == "pagadas":
         multas = multas.filter(estado="Pagada")
 
+    # Resumen SOLO de multas NO archivadas
     resumen = {
-        "total": Multa.objects.count(),
-        "pendientes": Multa.objects.filter(estado="Pendiente").count(),
-        "pagadas": Multa.objects.filter(estado="Pagada").count(),
-        "recaudado": Multa.objects.filter(estado="Pagada").aggregate(total=Sum("valor"))["total"] or 0,
-        "por_cobrar": Multa.objects.filter(estado="Pendiente").aggregate(total=Sum("valor"))["total"] or 0
+        "total": Multa.objects.filter(archivada=False).count(),
+        "pendientes": Multa.objects.filter(archivada=False, estado="Pendiente").count(),
+        "pagadas": Multa.objects.filter(archivada=False, estado="Pagada").count(),
+        "recaudado": Multa.objects.filter(archivada=False, estado="Pagada").aggregate(total=Sum("valor"))["total"] or 0,
+        "por_cobrar": Multa.objects.filter(archivada=False, estado="Pendiente").aggregate(total=Sum("valor"))["total"] or 0
     }
 
     return render(request, "admin/dashboard.html", {
@@ -122,19 +121,16 @@ def dashboard(request):
     })
 
 
-# Nueva función: Descargar informe PDF de una multa específica
+# Descargar informe PDF de una multa específica
 def descargar_informe_multa(request, id):
     multa = get_object_or_404(Multa, id=id)
     
-    # Crear respuesta HTTP con tipo PDF
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="Informe_Multa_{multa.numero_multa}.pdf"'
     
-    # Crear documento PDF
     doc = SimpleDocTemplate(response, pagesize=letter)
     elements = []
     
-    # Estilos
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(
         'CustomTitle',
@@ -154,12 +150,10 @@ def descargar_informe_multa(request, id):
         spaceBefore=12
     )
     
-    # Título
     title = Paragraph("INFORME DE MULTA DE TRÁNSITO", title_style)
     elements.append(title)
     elements.append(Spacer(1, 0.3*inch))
     
-    # Información general
     info_general = Paragraph("<b>INFORMACIÓN GENERAL</b>", heading_style)
     elements.append(info_general)
     
@@ -183,7 +177,6 @@ def descargar_informe_multa(request, id):
     elements.append(table_general)
     elements.append(Spacer(1, 0.3*inch))
     
-    # Información del vehículo
     info_vehiculo = Paragraph("<b>INFORMACIÓN DEL VEHÍCULO</b>", heading_style)
     elements.append(info_vehiculo)
     
@@ -207,7 +200,6 @@ def descargar_informe_multa(request, id):
     elements.append(table_vehiculo)
     elements.append(Spacer(1, 0.3*inch))
     
-    # Detalles de la infracción
     info_infraccion = Paragraph("<b>DETALLES DE LA INFRACCIÓN</b>", heading_style)
     elements.append(info_infraccion)
     
@@ -231,7 +223,6 @@ def descargar_informe_multa(request, id):
     elements.append(table_infraccion)
     elements.append(Spacer(1, 0.5*inch))
     
-    # Estado de pago
     if multa.estado == "Pagada":
         color_estado = colors.HexColor('#10b981')
         texto_estado = "✓ MULTA PAGADA"
@@ -253,7 +244,6 @@ def descargar_informe_multa(request, id):
     elements.append(estado)
     elements.append(Spacer(1, 0.3*inch))
     
-    # Nota al pie
     nota = Paragraph(
         "<i>Este documento es un informe generado electrónicamente. "
         "Para más información contacte con las autoridades de tránsito correspondientes.</i>",
@@ -261,19 +251,18 @@ def descargar_informe_multa(request, id):
     )
     elements.append(nota)
     
-    # Generar PDF
     doc.build(elements)
     return response
 
 
-# Nueva función: Descargar informe general de todas las multas (para el dashboard)
+# Descargar informe general
 def descargar_informe_general(request):
     filtro = request.GET.get("filtro", "todas")
     busqueda = request.GET.get("busqueda", "").strip()
     
-    multas = Multa.objects.all()
+    # Solo multas NO archivadas
+    multas = Multa.objects.filter(archivada=False)
     
-    # Aplicar los mismos filtros del dashboard
     if busqueda:
         fecha_obj = None
         formatos_fecha = ['%Y-%m-%d', '%d-%m-%Y', '%d/%m/%Y', '%Y/%m/%d']
@@ -300,15 +289,12 @@ def descargar_informe_general(request):
     elif filtro == "pagadas":
         multas = multas.filter(estado="Pagada")
     
-    # Crear respuesta HTTP
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="Informe_Multas_{datetime.now().strftime("%Y%m%d")}.pdf"'
     
-    # Crear documento
     doc = SimpleDocTemplate(response, pagesize=letter)
     elements = []
     
-    # Estilos
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(
         'CustomTitle',
@@ -319,12 +305,10 @@ def descargar_informe_general(request):
         alignment=TA_CENTER
     )
     
-    # Título
     title = Paragraph("INFORME GENERAL DE MULTAS", title_style)
     elements.append(title)
     elements.append(Spacer(1, 0.2*inch))
     
-    # Resumen
     resumen_data = [
         ['Total de Multas:', str(multas.count())],
         ['Pendientes:', str(multas.filter(estado="Pendiente").count())],
@@ -347,7 +331,6 @@ def descargar_informe_general(request):
     elements.append(table_resumen)
     elements.append(Spacer(1, 0.3*inch))
     
-    # Tabla de multas
     data = [['N° Multa', 'Placa', 'Infracción', 'Fecha', 'Valor', 'Estado']]
     
     for multa in multas:
@@ -374,7 +357,6 @@ def descargar_informe_general(request):
     ]))
     elements.append(table)
     
-    # Generar PDF
     doc.build(elements)
     return response
 
@@ -397,9 +379,13 @@ def editar_multa(request, id):
     return render(request, "admin/form_multa.html", {"form": form, "titulo": "Editar Multa"})
 
 
+# Nueva función: "Eliminar" (archivar) multa del dashboard
 def eliminar_multa(request, id):
     multa = get_object_or_404(Multa, id=id)
     if request.method == "POST":
-        multa.delete()
+        # No eliminamos, solo archivamos
+        multa.archivada = True
+        multa.save()
+        messages.success(request, f"La multa {multa.numero_multa} ha sido archivada del historial.")
         return redirect("dashboard")
     return render(request, "admin/eliminar_confirm.html", {"multa": multa})

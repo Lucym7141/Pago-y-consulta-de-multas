@@ -15,6 +15,7 @@ class Multa(models.Model):
     fecha = models.DateField()
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.CharField(max_length=10, choices=ESTADOS, default="Pendiente")
+    archivada = models.BooleanField(default=False)  # ← NUEVO CAMPO
 
     class Meta:
         ordering = ["-fecha"]
