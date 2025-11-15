@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container" style="max-width:600px; margin-top:3rem;">
+    
+    <div class="card shadow-lg border-0" style="border-radius:15px;">
+        <div class="card-body p-5">
+            
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <div class="mb-3">
+                    <span style="font-size:4rem;">✨</span>
+                </div>
+                <h2 class="fw-bold">Crear Cuenta</h2>
+                <p class="text-muted">Únete a MultaPay y gestiona tus multas fácilmente</p>
+            </div>
+
+            <!-- Mensajes -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Formulario -->
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" name="nombre_completo" class="form-control" 
+                               placeholder="Ej: Juan Pérez" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Usuario</label>
+                        <input type="text" name="username" class="form-control" 
+                               placeholder="Ej: juanperez" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Documento</label>
+                        <input type="text" name="documento" class="form-control" 
+                               placeholder="Ej: 12345678" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    <input type="email" name="email" class="form-control" 
+                           placeholder="tu@email.com" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Contraseña</label>
+                        <input type="password" name="password" class="form-control" 
+                               placeholder="Mínimo 8 caracteres" required minlength="8">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Confirmar Contraseña</label>
+                        <input type="password" name="password_confirm" class="form-control" 
+                               placeholder="Repite tu contraseña" required minlength="8">
+                    </div>
+                </div>
+
+                <div class="alert alert-info small">
+                    <strong>ℹ️ Nota:</strong> Tu información está protegida y solo se usará para gestionar tus multas.
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                    Crear Cuenta
+                </button>
+
+                <div class="text-center">
+                    <p class="text-muted mb-2">¿Ya tienes una cuenta?</p>
+                    <a href="{% url 'user_login' %}" class="btn btn-outline-primary w-100">
+                        Iniciar Sesión
+                    </a>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <a href="{% url 'home' %}" class="text-muted">← Volver al inicio</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

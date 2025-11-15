@@ -11,7 +11,90 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from .models import Multa
 from .forms import MultaForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
+# Vista: Página principal (landing page)
+def home(request):
+    if request.user.is_authenticated:
+        return redirect('user_dashboard')  # Si ya está logueado, va a su dashboard
+    return render(request, "home.html")
+
+
+# Vista: Registro de usuario (Signup)
+def signup(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
+        nombre_completo = request.POST.get('nombre_completo')
+        documento = request.POST.get('documento')
+        
+        # Validaciones
+        if password != password_confirm:
+            messages.error(request, "Las contraseñas no coinciden")
+            return render(request, "auth/signup.html")
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "El nombre de usuario ya está en uso")
+            return render(request, "auth/signup.html")
+        
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "El correo electrónico ya está registrado")
+            return render(request, "auth/signup.html")
+        
+        # Crear usuario
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=nombre_completo
+        )
+        
+        # Login automático después de registro
+        login(request, user)
+        messages.success(request, f"¡Bienvenido {nombre_completo}! Tu cuenta ha sido creada exitosamente.")
+        return redirect('user_dashboard')
+    
+    return render(request, "auth/signup.html")
+
+
+# Vista: Login de usuario
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            messages.success(request, f"¡Bienvenido de nuevo, {user.first_name or user.username}!")
+            return redirect('user_dashboard')
+        else:
+            messages.error(request, "Usuario o contraseña incorrectos")
+    
+    return render(request, "auth/login.html")
+
+
+# Vista: Logout
+def user_logout(request):
+    logout(request)
+    messages.success(request, "Has cerrado sesión exitosamente")
+    return redirect('home')
+
+
+# Vista: Dashboard de usuario (solo para usuarios autenticados)
+@login_required(login_url='user_login')
+def user_dashboard(request):
+    # Aquí mostrarás las multas del usuario
+    user_multas = Multa.objects.filter(archivada=False)  # Por ahora todas
+    
+    return render(request, "user/dashboard.html", {
+        "user_multas": user_multas
+    })
 
 # Vista pública: muestra el formulario de consulta
 def consulta(request):

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    
+    <!-- Header con saludo y logout -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">👋 Hola, {{ user.first_name|default:user.username }}</h2>
+            <p class="text-muted">Bienvenido a tu panel de control</p>
+        </div>
+        <div>
+            <a href="{% url 'consulta' %}" class="btn btn-outline-primary me-2">🔍 Consultar Multas</a>
+            <a href="{% url 'user_logout' %}" class="btn btn-outline-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <!-- Tarjetas de resumen -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="mb-0">{{ user_multas.count }}</h3>
+                    <p class="text-muted mb-0">Multas Totales</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="mb-0 text-warning">{{ user_multas|length }}</h3>
+                    <p class="text-muted mb-0">Pendientes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="mb-0 text-success">0</h3>
+                    <p class="text-muted mb-0">Pagadas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <strong>🚧 En construcción:</strong> Próximamente podrás registrar tus vehículos y ver solo tus multas aquí.
+    </div>
+
+</div>
+
+{% endblock %}

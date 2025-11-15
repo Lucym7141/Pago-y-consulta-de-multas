@@ -3,8 +3,14 @@ from django.shortcuts import redirect
 from . import views
 
 urlpatterns = [
-    # Raíz - redirige a consulta
-    path("", lambda request: redirect('consulta'), name="home"),
+    # Página principal
+    path("", views.home, name="home"),
+    
+    # Autenticación
+    path("login/", views.user_login, name="user_login"),
+    path("signup/", views.signup, name="signup"),
+    path("logout/", views.user_logout, name="user_logout"),
+    path("mi-cuenta/", views.user_dashboard, name="user_dashboard"),
     
     # Públicas
     path("consulta/", views.consulta, name="consulta"),

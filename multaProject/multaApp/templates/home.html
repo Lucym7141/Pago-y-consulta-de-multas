@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height:100vh; padding:0;">
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background:rgba(0,0,0,0.2);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                <span style="font-size:1.5rem;">🚗</span> MultaPay
+            </a>
+            <div class="ms-auto">
+                <a href="{% url 'user_login' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
+                <a href="{% url 'signup' %}" class="btn btn-light">Registrarse</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container text-center text-white" style="padding:5rem 0;">
+        <h1 class="display-3 fw-bold mb-4">Gestiona tus Multas de Tránsito</h1>
+        <p class="lead mb-5" style="font-size:1.3rem;">
+            Consulta, paga y mantén al día tus multas de forma rápida y segura
+        </p>
+        
+        <!-- Botones principales -->
+        <div class="row justify-content-center g-3 mb-5">
+            <div class="col-md-4">
+                <a href="{% url 'consulta' %}" class="btn btn-light btn-lg w-100 shadow">
+                    🔍 Consultar Multas
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'signup' %}" class="btn btn-warning btn-lg w-100 shadow">
+                    ✨ Crear Cuenta Gratis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Características -->
+    <div class="container pb-5">
+        <div class="row g-4 text-white">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size:3rem;">💳</div>
+                        <h4 class="fw-bold mb-3">Pagos Seguros</h4>
+                        <p>Paga tus multas de forma segura con tarjeta de crédito, débito o PSE</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size:3rem;">📱</div>
+                        <h4 class="fw-bold mb-3">Acceso 24/7</h4>
+                        <p>Consulta tus multas en cualquier momento desde cualquier dispositivo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3" style="font-size:3rem;">📄</div>
+                        <h4 class="fw-bold mb-3">Historial Completo</h4>
+                        <p>Descarga informes y mantén el control de todas tus multas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="container text-center text-white pb-5">
+        <h2 class="mb-4">¿Nuevo en MultaPay?</h2>
+        <p class="lead mb-4">Crea tu cuenta y gestiona todas tus multas en un solo lugar</p>
+        <a href="{% url 'signup' %}" class="btn btn-warning btn-lg px-5">
+            Registrarse Ahora →
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
