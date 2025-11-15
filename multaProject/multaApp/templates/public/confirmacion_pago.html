@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="card shadow-sm p-5 text-center" style="max-width:600px;margin:3rem auto; border-radius:12px;">
+    
+    <!-- Animación de éxito -->
+    <div class="mb-4">
+        <div style="
+            width:100px; 
+            height:100px; 
+            background:#10b981; 
+            border-radius:50%; 
+            margin:0 auto;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            animation: scaleIn 0.5s ease-out;
+        ">
+            <span style="font-size:3rem; color:white;">✓</span>
+        </div>
+    </div>
+
+    <h2 class="text-success fw-bold mb-3">¡Pago Exitoso!</h2>
+    <p class="text-muted mb-4">
+        Tu multa ha sido pagada correctamente
+    </p>
+
+    <!-- Detalles del pago -->
+    <div class="card mb-4" style="background:#f0fdf4; border:1px solid #86efac;">
+        <div class="card-body text-start">
+            <h6 class="text-success mb-3">📋 Detalles de la Transacción</h6>
+            <div class="row small">
+                <div class="col-6 mb-2">
+                    <strong>N° Multa:</strong><br>
+                    {{ multa.numero_multa }}
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Placa:</strong><br>
+                    {{ multa.placa }}
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Infracción:</strong><br>
+                    {{ multa.infraccion }}
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Monto Pagado:</strong><br>
+                    <span class="text-success fw-bold">${{ multa.valor }}</span>
+                </div>
+                <div class="col-12 mt-2">
+                    <strong>Fecha de Pago:</strong><br>
+                    {{ multa.fecha|date:"d/m/Y" }} - {% now "H:i" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <small>
+            📧 Se ha enviado un comprobante de pago a tu correo electrónico
+        </small>
+    </div>
+
+    <div class="d-grid gap-2 mt-4">
+        <a href="{% url 'resultados_consulta' %}?q={{ multa.placa }}" class="btn btn-primary">
+            Ver Todas las Multas
+        </a>
+        <a href="{% url 'consulta' %}" class="btn btn-outline-secondary">
+            Realizar Nueva Consulta
+        </a>
+    </div>
+
+</div>
+
+<style>
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+
+{% endblock %}

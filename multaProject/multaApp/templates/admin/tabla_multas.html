@@ -1,0 +1,66 @@
+<div class="card table-container">
+    <!-- Header con botón de informe general -->
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:#f8f9fa; border-bottom:2px solid #dee2e6;">
+        <h5 class="mb-0">📋 Historial de Multas</h5>
+        <a href="{% url 'descargar_informe_general' %}?filtro={{ filtro }}&busqueda={{ busqueda }}" 
+           class="btn btn-success btn-sm">
+            📄 Descargar Informe General
+        </a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Numero Multa</th>
+                <th>Placa</th>
+                <th>Infracción</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for multa in multas %}
+            <tr>
+                <td>{{ multa.numero_multa }}</td>
+                <td><strong>{{ multa.placa }}</strong></td>
+                <td>{{ multa.infraccion }}<br><small class="text-muted">{{ multa.codigo }}</small></td>
+                <td>{{ multa.fecha|date:"d/m/Y" }}</td>
+                <td>${{ multa.valor }}</td>
+                <td>
+                    {% if multa.estado == "Pagada" %}
+                        <span class="badge-paid">Pagada</span>
+                    {% else %}
+                        <span class="badge-pending">Pendiente</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'descargar_informe_multa' multa.id %}" 
+                           class="btn btn-sm btn-info" 
+                           title="Descargar Informe PDF">
+                            📥 Descargar
+                        </a>
+                        <a href="{% url 'eliminar_multa' multa.id %}" 
+                           class="btn btn-sm btn-danger" 
+                           title="Eliminar"
+                           onclick="return confirm('¿Estás seguro de eliminar esta multa?')">
+                            🗑️ Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No hay multas registradas.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <span class="text-muted">Mostrando {{ multas.count }} multas</span>
+        <span><strong>Por cobrar:</strong> ${{ resumen.por_cobrar }} | <strong>Recaudado:</strong> ${{ resumen.recaudado }}</span>
+    </div>
+</div>

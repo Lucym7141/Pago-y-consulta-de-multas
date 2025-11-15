@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="card shadow-sm p-4" style="max-width:700px;margin:2rem auto; border-radius:12px;">
+    
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <div class="mb-3">
+            <span style="font-size:4rem;">💳</span>
+        </div>
+        <h3 class="fw-bold">Pago de Multa</h3>
+        <p class="text-muted">Completa la información para procesar tu pago</p>
+    </div>
+
+    <!-- Detalles de la multa -->
+    <div class="card mb-4" style="background:#f8f9fa; border:none;">
+        <div class="card-body">
+            <h5 class="mb-3">📄 Detalles de la Multa</h5>
+            <div class="row">
+                <div class="col-6 mb-2">
+                    <strong>N° Multa:</strong><br>
+                    <span class="badge bg-secondary">{{ multa.numero_multa }}</span>
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Placa:</strong><br>
+                    {{ multa.placa }}
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Infracción:</strong><br>
+                    {{ multa.infraccion }}
+                </div>
+                <div class="col-6 mb-2">
+                    <strong>Fecha:</strong><br>
+                    {{ multa.fecha|date:"d/m/Y" }}
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Total a Pagar:</h5>
+                <h4 class="mb-0" style="color:#e53e3e;">${{ multa.valor }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de pago -->
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label class="form-label fw-bold">Método de Pago</label>
+            <select class="form-select" required>
+                <option value="">Seleccione un método</option>
+                <option value="tarjeta">💳 Tarjeta de Crédito/Débito</option>
+                <option value="pse">🏦 PSE</option>
+                <option value="efectivo">💵 Efectivo (Punto de pago)</option>
+            </select>
+        </div>
+
+        <div class="alert alert-info">
+            <small>
+                🔒 <strong>Transacción segura:</strong> Tus datos están protegidos con encriptación SSL.
+            </small>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success btn-lg">
+                ✓ Confirmar Pago de ${{ multa.valor }}
+            </button>
+            <a href="{% url 'resultados_consulta' %}?q={{ multa.placa }}" class="btn btn-outline-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}
