@@ -1,100 +1,162 @@
 {% extends "base.html" %}
-{% load static %}
+{% block title %}Crear Cuenta - MultaPay{% endblock %}
+
+{% block extra_styles %}
+<style>
+body {
+    background: #ecf2ff !important;
+}
+
+.signup-container {
+    max-width: 450px;
+    margin: 60px auto;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.signup-container h2 {
+    text-align: center;
+    color: #0d6efd;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #234d9a;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    outline: none;
+}
+
+.btn-signup {
+    width: 100%;
+    padding: 12px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-signup:hover {
+    background: #234d9a;
+    transform: translateY(-1px);
+}
+
+.signup-container p {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.help-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.form-check {
+    margin-top: 1rem;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="signup-container">
+    <h2>Crear Cuenta</h2>
 
-<div class="container" style="max-width:600px; margin-top:3rem;">
-    
-    <div class="card shadow-lg border-0" style="border-radius:15px;">
-        <div class="card-body p-5">
-            
-            <!-- Header -->
-            <div class="text-center mb-4">
-                <div class="mb-3">
-                    <span style="font-size:4rem;">✨</span>
-                </div>
-                <h2 class="fw-bold">Crear Cuenta</h2>
-                <p class="text-muted">Únete a MultaPay y gestiona tus multas fácilmente</p>
-            </div>
-
-            <!-- Mensajes -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Por favor corrige los siguientes errores:</strong>
+        <ul class="mb-0 mt-2">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
                 {% endfor %}
-            {% endif %}
-
-            <!-- Formulario -->
-            <form method="POST">
-                {% csrf_token %}
-                
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label fw-bold">Nombre Completo</label>
-                        <input type="text" name="nombre_completo" class="form-control" 
-                               placeholder="Ej: Juan Pérez" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Usuario</label>
-                        <input type="text" name="username" class="form-control" 
-                               placeholder="Ej: juanperez" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Documento</label>
-                        <input type="text" name="documento" class="form-control" 
-                               placeholder="Ej: 12345678" required>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Email</label>
-                    <input type="email" name="email" class="form-control" 
-                           placeholder="tu@email.com" required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Contraseña</label>
-                        <input type="password" name="password" class="form-control" 
-                               placeholder="Mínimo 8 caracteres" required minlength="8">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Confirmar Contraseña</label>
-                        <input type="password" name="password_confirm" class="form-control" 
-                               placeholder="Repite tu contraseña" required minlength="8">
-                    </div>
-                </div>
-
-                <div class="alert alert-info small">
-                    <strong>ℹ️ Nota:</strong> Tu información está protegida y solo se usará para gestionar tus multas.
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                    Crear Cuenta
-                </button>
-
-                <div class="text-center">
-                    <p class="text-muted mb-2">¿Ya tienes una cuenta?</p>
-                    <a href="{% url 'user_login' %}" class="btn btn-outline-primary w-100">
-                        Iniciar Sesión
-                    </a>
-                </div>
-
-                <hr class="my-4">
-
-                <div class="text-center">
-                    <a href="{% url 'home' %}" class="text-muted">← Volver al inicio</a>
-                </div>
-            </form>
-
-        </div>
+            {% endfor %}
+        </ul>
     </div>
+    {% endif %}
 
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="form-label">Usuario</label>
+            <input type="text" name="username" class="form-control" placeholder="Elige un nombre de usuario" required>
+            <div class="help-text">Requerido. 150 caracteres o menos. Solo letras, números y @/./+/-/_</div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Correo Electrónico</label>
+            <input type="email" name="email" class="form-control" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <input type="password" name="password1" class="form-control" placeholder="Crea una contraseña segura" required>
+            <div class="help-text">
+                Tu contraseña debe contener al menos 8 caracteres, no puede ser demasiado común ni similar a tu información personal.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Confirmar Contraseña</label>
+            <input type="password" name="password2" class="form-control" placeholder="Repite tu contraseña" required>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label" for="terms">
+                Acepto los <a href="#" style="color: #0d6efd;">términos y condiciones</a>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-signup">Registrarme</button>
+    </form>
+
+    <p>
+        ¿Ya tienes cuenta?
+        <a href="{% url 'login' %}" style="color: #0d6efd; text-decoration: none; font-weight: 600;">Iniciar sesión</a>
+    </p>
 </div>
-
 {% endblock %}
