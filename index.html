@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultasClear - Consulta y Pago de Multas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .btn-hover:hover {
+            transform: scale(1.05);
+        }
+        .testimonial-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- HEADER -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-gavel text-white text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900">MultasClear</span>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="login.html" class="text-blue-600 font-semibold hover:text-blue-800 transition duration-200">Iniciar Sesión</a>
+                    <a href="signup.html" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 shadow-lg">
+                        Registrarse
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-gradient text-white py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                    Consulta y Pago de Multas<br>
+                    <span class="text-blue-200">al Instante</span>
+                </h1>
+                <p class="text-xl lg:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed">
+                    Una plataforma <span class="font-semibold">segura, moderna y eficiente</span> para gestionar tus obligaciones legales sin complicaciones.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="login.html" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition duration-300 shadow-2xl btn-hover">
+                        <i class="fas fa-search mr-3"></i>Consultar Multas
+                    </a>
+                    <a href="signup.html" class="border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-blue-600 transition duration-300 btn-hover">
+                        <i class="fas fa-user-plus mr-3"></i>Crear Cuenta Gratis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIÉNES SOMOS -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 lg:p-12 shadow-xl">
+                <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-building text-white text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">Quiénes Somos</h2>
+                        <p class="text-lg lg:text-xl text-gray-700 leading-relaxed">
+                            <span class="font-bold text-blue-600">MultasClear</span> es una empresa líder en soluciones tecnológicas orientadas a la consulta, administración y pago de multas de tránsito. Nuestro objetivo es ofrecer un sistema accesible, rápido y completamente confiable, disponible 24/7 para todos los usuarios.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MISIÓN Y VISIÓN -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <!-- MISIÓN -->
+                <div class="bg-white rounded-2xl p-8 card-hover shadow-lg border border-blue-100">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                            <i class="fas fa-bullseye text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-blue-600">Misión</h2>
+                    </div>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Proporcionar una experiencia digital eficiente que permita a los ciudadanos consultar y gestionar sus infracciones de tránsito de forma sencilla, transparente y segura, mejorando la calidad de vida mediante la optimización de procesos administrativos.
+                    </p>
+                </div>
+
+                <!-- VISIÓN -->
+                <div class="bg-white rounded-2xl p-8 card-hover shadow-lg border border-blue-100">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                            <i class="fas fa-eye text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-blue-600">Visión </h2>
+                    </div>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Convertirnos en la plataforma número uno en Latinoamérica para la gestión de obligaciones de tránsito, siendo reconocidos por nuestra innovación tecnológica, confiabilidad y compromiso con la satisfacción del usuario para el año 2025.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Nuestros Servicios</h2>
+                <p class="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+                    Soluciones completas para gestionar tus multas de manera eficiente
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                <!-- Servicio 1 -->
+                <div class="bg-white rounded-2xl p-8 card-hover shadow-lg border border-gray-100">
+                    <div class="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg">
+                        <i class="fas fa-search text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Consulta de Multas</h3>
+                    <p class="text-gray-600 text-lg text-center leading-relaxed">
+                        Consulta tus multas rápidamente por documento de identidad o número de placa en tiempo real.
+                    </p>
+                </div>
+
+                <!-- Servicio 2 -->
+                <div class="bg-white rounded-2xl p-8 card-hover shadow-lg border border-gray-100">
+                    <div class="w-20 h-20 bg-red-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg">
+                        <i class="fas fa-credit-card text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Pago en Línea</h3>
+                    <p class="text-gray-600 text-lg text-center leading-relaxed">
+                        Paga tus multas de manera segura con múltiples métodos de pago y recibos instantáneos.
+                    </p>
+                </div>
+
+                <!-- Servicio 3 -->
+                <div class="bg-white rounded-2xl p-8 card-hover shadow-lg border border-gray-100">
+                    <div class="w-20 h-20 bg-green-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg">
+                        <i class="fas fa-history text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Historial Completo</h3>
+                    <p class="text-gray-600 text-lg text-center leading-relaxed">
+                        Accede a tu historial completo de infracciones, pagos realizados y estados de cuenta.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LO QUE DICEN NUESTROS CLIENTES -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Lo que Dicen Nuestros Clientes</h2>
+                <p class="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+                    Experiencias reales de usuarios que confían en nosotros
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonio 1 -->
+                <div class="testimonial-card rounded-2xl p-8 card-hover border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            M
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">María González</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">
+                        "Increíblemente fácil de usar. Pagué mi multa en 5 minutos sin salir de casa. ¡Totalmente recomendado!"
+                    </p>
+                </div>
+
+                <!-- Testimonio 2 -->
+                <div class="testimonial-card rounded-2xl p-8 card-hover border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            C
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">Carlos Rodríguez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">
+                        "La consulta de multas es instantánea. Me encanta poder ver todo mi historial en un solo lugar."
+                    </p>
+                </div>
+
+                <!-- Testimonio 3 -->
+                <div class="testimonial-card rounded-2xl p-8 card-hover border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            A
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">Ana Martínez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">
+                        "Excelente plataforma. El soporte al cliente es muy rápido y resolvieron todas mis dudas."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="py-20 bg-gradient-to-r from-blue-600 to-blue-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
+                ¿Listo para consultar tus multas?
+            </h2>
+            <p class="text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Simplifica la gestión de tus obligaciones de tránsito con nuestra plataforma segura y eficiente.
+            </p>
+            <a href="signup.html" class="inline-block bg-white text-blue-600 px-12 py-5 rounded-2xl font-bold text-xl hover:bg-gray-100 transition duration-300 shadow-2xl btn-hover">
+                <i class="fas fa-arrow-right mr-3"></i>Registrarse Ahora
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-gavel text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">MultasClear</h3>
+                </div>
+                <p class="text-gray-400 max-w-md mx-auto text-lg">
+                    Plataforma líder en consulta y pago de multas de tránsito en Latinoamérica.
+                </p>
+                <div class="mt-6">
+                    <p class="text-gray-500">© 2025 MultasClear. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
