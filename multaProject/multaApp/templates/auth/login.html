@@ -1,68 +1,196 @@
 {% extends "base.html" %}
-{% load static %}
-{% block content %}
+{% block title %}Iniciar Sesión - MultaPay{% endblock %}
 
-<div class="container" style="max-width:500px; margin-top:5rem;">
+{% block extra_styles %}
+<style>
+:root {
+    --primary-blue: #0d6efd;
+    --light-blue: #e9f1ff;
+    --dark-blue: #234d9a;
+    --white: #ffffff;
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+}
+
+.login-left {
+    flex: 1;
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-right {
+    flex: 1;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-blue);
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 2rem;
+    color: #666;
+}
+
+.signup-link a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.welcome-section {
+    text-align: center;
+    max-width: 500px;
+}
+
+.welcome-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    margin-bottom: 1rem;
+}
+
+.welcome-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
     
-    <div class="card shadow-lg border-0" style="border-radius:15px;">
-        <div class="card-body p-5">
-            
-            <!-- Logo/Header -->
-            <div class="text-center mb-4">
-                <div class="mb-3">
-                    <span style="font-size:4rem;">🔐</span>
-                </div>
-                <h2 class="fw-bold">Iniciar Sesión</h2>
-                <p class="text-muted">Accede a tu cuenta de MultaPay</p>
-            </div>
+    .login-left {
+        padding: 3rem 1rem;
+    }
+    
+    .welcome-title {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}
 
-            <!-- Mensajes -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
+{% block content %}
+<div class="login-container">
+    <!-- Left Side - Login Form -->
+    <div class="login-right">
+        <div class="login-card">
+            <h1 class="login-title">Login</h1>
+            <p class="login-subtitle">Accede a tu cuenta MultaPay</p>
 
-            <!-- Formulario -->
             <form method="POST">
                 {% csrf_token %}
                 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Usuario o Email</label>
-                    <input type="text" name="username" class="form-control form-control-lg" 
-                           placeholder="Ingresa tu usuario" required>
+                {% if form.errors %}
+                <div style="background: #fee; color: #c33; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border: 1px solid #fcc;">
+                    ❌ Usuario o contraseña incorrectos
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu usuario" required autofocus>
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold">Contraseña</label>
-                    <input type="password" name="password" class="form-control form-control-lg" 
-                           placeholder="Ingresa tu contraseña" required>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                    Iniciar Sesión
-                </button>
-
-                <div class="text-center">
-                    <p class="text-muted mb-2">¿No tienes una cuenta?</p>
-                    <a href="{% url 'signup' %}" class="btn btn-outline-primary w-100">
-                        Crear Cuenta Nueva
-                    </a>
-                </div>
-
-                <hr class="my-4">
-
-                <div class="text-center">
-                    <a href="{% url 'home' %}" class="text-muted">← Volver al inicio</a>
-                </div>
+                <button type="submit" class="btn-login">Login</button>
             </form>
 
+            <div class="signup-link">
+                Don't have an account? <br>
+                <a href="{% url 'signup' %}">Sign Up</a>
+            </div>
         </div>
     </div>
 
+    <!-- Right Side - Welcome Message -->
+    <div class="login-left">
+        <div class="welcome-section">
+            <h2 class="welcome-title">WELCOME BACK!</h2>
+            <p class="welcome-subtitle">
+                We are happy to have you with us again. If you need anything, we are here to help.
+            </p>
+        </div>
+    </div>
 </div>
-
 {% endblock %}

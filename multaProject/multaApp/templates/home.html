@@ -1,86 +1,218 @@
 {% extends "base.html" %}
-{% load static %}
-{% block content %}
+{% block title %}Inicio - MultaPay{% endblock %}
 
-<div class="container-fluid" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height:100vh; padding:0;">
+{% block extra_styles %}
+<style>
+.hero {
+    background: linear-gradient(135deg, #e9f1ff 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 4rem 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: #0d6efd;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #234d9a;
+    margin-bottom: 1.5rem;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    color: #666;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary-custom {
+    background: #0d6efd;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background: #234d9a;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-outline-custom {
+    background: transparent;
+    color: #0d6efd;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid #0d6efd;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+    background: #0d6efd;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.card-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(16,64,128,0.08);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.section-title {
+    color: #0d6efd;
+    text-align: center;
+    font-weight: 700;
+    margin: 3rem 0 2rem;
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #eaf2ff;
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1rem;
+}
+
+.review-card {
+    background: #f7fbff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #0d6efd;
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
     
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background:rgba(0,0,0,0.2);">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-                <span style="font-size:1.5rem;">🚗</span> MultaPay
-            </a>
-            <div class="ms-auto">
-                <a href="{% url 'user_login' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
-                <a href="{% url 'signup' %}" class="btn btn-light">Registrarse</a>
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-primary-custom, .btn-outline-custom {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">Consultoría de Multas Basada en Resultados</div>
+        <h1>Consulta tus multas al instante</h1>
+        <p>Rápido, seguro y confiable. La solución digital para gestionar tus multas de tránsito.</p>
+
+        {% if not user.is_authenticated %}
+            <div class="cta-buttons">
+                <a href="{% url 'login' %}" class="btn-primary-custom">Comenzar</a>
+                <a href="{% url 'signup' %}" class="btn-outline-custom">Ver Resultados</a>
+            </div>
+        {% else %}
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary-custom">Consultar Multas</a>
+                <a href="#" class="btn-outline-custom">Mi Perfil</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- QUIÉNES SOMOS -->
+    <h2 class="section-title">¿Quiénes Somos?</h2>
+    <div class="card-section">
+        <p class="fs-5">Somos una plataforma especializada en facilitar la consulta y gestión de multas de tránsito, ofreciendo un servicio rápido, seguro y 100% confiable.</p>
+    </div>
+
+    <!-- QUÉ HACEMOS -->
+    <h2 class="section-title">¿Qué Hacemos?</h2>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card-section">
+                <div class="icon-circle">🔍</div>
+                <h5>Consulta Rápida</h5>
+                <p>Busca por placa del vehículo o documento de identidad en segundos.</p>
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="container text-center text-white" style="padding:5rem 0;">
-        <h1 class="display-3 fw-bold mb-4">Gestiona tus Multas de Tránsito</h1>
-        <p class="lead mb-5" style="font-size:1.3rem;">
-            Consulta, paga y mantén al día tus multas de forma rápida y segura
-        </p>
-        
-        <!-- Botones principales -->
-        <div class="row justify-content-center g-3 mb-5">
-            <div class="col-md-4">
-                <a href="{% url 'consulta' %}" class="btn btn-light btn-lg w-100 shadow">
-                    🔍 Consultar Multas
-                </a>
+        <div class="col-md-4">
+            <div class="card-section">
+                <div class="icon-circle">📄</div>
+                <h5>Detalle Completo</h5>
+                <p>Información detallada: estado, valor, fecha y motivo de la multa.</p>
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'signup' %}" class="btn btn-warning btn-lg w-100 shadow">
-                    ✨ Crear Cuenta Gratis
-                </a>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-section">
+                <div class="icon-circle">💳</div>
+                <h5>Guía de Pago</h5>
+                <p>Instrucciones claras para pagar en línea o puntos autorizados.</p>
             </div>
         </div>
     </div>
 
-    <!-- Características -->
-    <div class="container pb-5">
-        <div class="row g-4 text-white">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3" style="font-size:3rem;">💳</div>
-                        <h4 class="fw-bold mb-3">Pagos Seguros</h4>
-                        <p>Paga tus multas de forma segura con tarjeta de crédito, débito o PSE</p>
-                    </div>
-                </div>
+    <!-- OPINIONES -->
+    <h2 class="section-title">Lo que Dicen Nuestros Usuarios</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="review-card">
+                <strong>Juan P.</strong>
+                <div class="text-warning mb-2">★★★★★</div>
+                <p class="mb-0">"Rápido y confiable. Encontré mis multas en minutos."</p>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3" style="font-size:3rem;">📱</div>
-                        <h4 class="fw-bold mb-3">Acceso 24/7</h4>
-                        <p>Consulta tus multas en cualquier momento desde cualquier dispositivo</p>
-                    </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="review-card">
+                <strong>Ana M.</strong>
+                <div class="text-warning mb-2">★★★★★</div>
+                <p class="mb-0">"Interfaz clara y fácil de usar. Excelente servicio."</p>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px);">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3" style="font-size:3rem;">📄</div>
-                        <h4 class="fw-bold mb-3">Historial Completo</h4>
-                        <p>Descarga informes y mantén el control de todas tus multas</p>
-                    </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="review-card">
+                <strong>Carlos R.</strong>
+                <div class="text-warning mb-2">★★★★☆</div>
+                <p class="mb-0">"Muy buen servicio, me ayudó a organizar mis pagos."</p>
             </div>
         </div>
     </div>
-
-    <!-- Call to Action -->
-    <div class="container text-center text-white pb-5">
-        <h2 class="mb-4">¿Nuevo en MultaPay?</h2>
-        <p class="lead mb-4">Crea tu cuenta y gestiona todas tus multas en un solo lugar</p>
-        <a href="{% url 'signup' %}" class="btn btn-warning btn-lg px-5">
-            Registrarse Ahora →
-        </a>
-    </div>
-
 </div>
-
 {% endblock %}
