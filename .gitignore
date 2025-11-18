@@ -1,1 +1,27 @@
-fotomulta/
+# Django
+*.pyc
+__pycache__/
+*.sqlite3
+db.sqlite3
+migrations/
+
+# Environment variables
+.env
+.env.local
+
+# Static files
+/staticfiles/
+/media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database  
+*.db
