@@ -153,15 +153,36 @@ def confirmacion_pago(request, id):
 
 
 # Admin dashboard - SOLO muestra multas NO archivadas
+# Admin dashboard - Muestra multas NO archivadas (accesible para usuarios autenticados)
+
+# Vista: Dashboard de usuario (solo para usuarios autenticados)
+@login_required(login_url='user_login')
+def user_dashboard(request):
+    # Solo multas del usuario actual
+    user_multas = Multa.objects.filter(usuario=request.user, archivada=False)
+    
+    # Calcular estadísticas
+    total_multas = user_multas.count()
+    pendientes = user_multas.filter(estado="Pendiente").count()
+    pagadas = user_multas.filter(estado="Pagada").count()
+    total_a_pagar = user_multas.filter(estado="Pendiente").aggregate(total=Sum("valor"))["total"] or 0
+    
+    return render(request, "user/dashboard.html", {
+        "user_multas": user_multas,
+        "total_multas": total_multas,
+        "pendientes": pendientes,
+        "pagadas": pagadas,
+        "total_a_pagar": total_a_pagar,
+    })
+@login_required(login_url='user_login')
 def dashboard(request):
     filtro = request.GET.get("filtro", "todas")
     busqueda = request.GET.get("busqueda", "").strip()
 
-    # Filtrar solo multas NO archivadas
-    multas = Multa.objects.filter(archivada=False)
+    # Solo multas del usuario actual
+    multas = Multa.objects.filter(usuario=request.user, archivada=False)
 
     if busqueda:
-        # Intentar detectar si es una fecha
         fecha_obj = None
         formatos_fecha = ['%Y-%m-%d', '%d-%m-%Y', '%d/%m/%Y', '%Y/%m/%d']
         
@@ -187,13 +208,12 @@ def dashboard(request):
     elif filtro == "pagadas":
         multas = multas.filter(estado="Pagada")
 
-    # Resumen SOLO de multas NO archivadas
+    # Resumen solo del usuario actual
     resumen = {
-        "total": Multa.objects.filter(archivada=False).count(),
-        "pendientes": Multa.objects.filter(archivada=False, estado="Pendiente").count(),
-        "pagadas": Multa.objects.filter(archivada=False, estado="Pagada").count(),
-        "recaudado": Multa.objects.filter(archivada=False, estado="Pagada").aggregate(total=Sum("valor"))["total"] or 0,
-        "por_cobrar": Multa.objects.filter(archivada=False, estado="Pendiente").aggregate(total=Sum("valor"))["total"] or 0
+        "total": Multa.objects.filter(usuario=request.user, archivada=False).count(),
+        "pendientes": Multa.objects.filter(usuario=request.user, archivada=False, estado="Pendiente").count(),
+        "pagadas": Multa.objects.filter(usuario=request.user, archivada=False, estado="Pagada").count(),
+        "recaudado": Multa.objects.filter(usuario=request.user, archivada=False, estado="Pagada").aggregate(total=Sum("valor"))["total"] or 0,
     }
 
     return render(request, "admin/dashboard.html", {
@@ -202,7 +222,6 @@ def dashboard(request):
         "filtro": filtro,
         "busqueda": busqueda,
     })
-
 
 # Descargar informe PDF de una multa específica
 def descargar_informe_multa(request, id):

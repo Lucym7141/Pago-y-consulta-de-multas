@@ -1,74 +1,445 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}Consulta de Multas - MultaPay{% endblock %}
+
+{% block extra_styles %}
+<style>
+/* Fondo específico para esta página con variación de azules */
+body {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f8fbff 50%, #ffffff 100%) !important;
+    position: relative;
+}
+
+/* Patrón de fondo sutil con múltiples tonos */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(25, 118, 210, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(13, 110, 253, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 50% 20%, rgba(30, 136, 229, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1rem;
+}
+
+/* Banner de bienvenida con gradiente vibrante */
+.welcome-banner {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #1976d2 0%, #2196f3 50%, #42a5f5 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(25, 118, 210, 0.3);
+    text-align: center;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botón Historial - Flotante con azul más oscuro */
+.btn-historial {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(21, 101, 192, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.btn-historial:hover {
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(13, 71, 161, 0.5);
+}
+
+.btn-historial .badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+/* Tarjeta principal con borde degradado multicolor */
+.search-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 40px rgba(33, 150, 243, 0.2);
+    border-top: 5px solid;
+    border-image: linear-gradient(90deg, #1976d2, #2196f3, #42a5f5) 1;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Icono circular con gradiente azul cielo */
+.icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(25, 118, 210, 0.3);
+    }
+}
+
+/* Título con gradiente azul intenso */
+.search-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #2196f3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.search-subtitle {
+    color: #546e7a;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Formulario mejorado */
+.form-label {
+    font-weight: 700;
+    color: #1565c0;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-control {
+    padding: 1rem 1.5rem;
+    border: 2px solid #bbdefb;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: #f1f8ff;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2196f3;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15);
+    transform: translateY(-2px);
+}
+
+.form-control::placeholder {
+    color: #90a4ae;
+}
+
+/* Botón de búsqueda con gradiente vibrante */
+
+/* Botón Mis Multas - Estilo dashboard compacto */
+.btn-mis-multas {
+    background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 100%);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(30, 136, 229, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite 0.5s;
+    font-size: 0.95rem;
+}
+
+.btn-mis-multas:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #1e88e5 100%);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(21, 101, 192, 0.5);
+}
+
+.btn-mis-multas .badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .btn-mis-multas {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+.btn-search {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 50%, #64b5f6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-search::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-search:hover::before {
+    left: 100%;
+}
+
+.btn-search:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 50%, #2196f3 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(21, 101, 192, 0.5);
+}
+
+.btn-search:active {
+    transform: translateY(-1px);
+}
+
+/* Sección de información */
+.info-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #bbdefb;
+}
+
+.info-box {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
+    border-left: 4px solid #2196f3;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.info-box:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.15);
+}
+
+.info-box strong {
+    color: #1976d2;
+}
+
+/* Features badges con diferentes tonos de azul */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.feature-badge {
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(25, 118, 210, 0.3);
+    transition: all 0.3s ease;
+}
+
+.feature-badge:nth-child(1) {
+    background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+}
+
+.feature-badge:nth-child(2) {
+    background: linear-gradient(135deg, #1565c0 0%, #1e88e5 100%);
+}
+
+.feature-badge:nth-child(3) {
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+}
+
+.feature-badge:nth-child(4) {
+    background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 100%);
+}
+
+.feature-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .search-title {
+        font-size: 1.5rem;
+    }
+
+    .btn-historial {
+        right: 1rem;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-badge {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="content-wrapper">
+    
+    <!-- Botón Historial Flotante -->
+   {% if user.is_authenticated %}
+   <a href="{% url 'dashboard' %}" class="btn-mis-multas">
+     <span style="font-size: 1.2rem;">📋</span>
+     <span>Mis Multas</span>
+  </a>
+   {% endif %}
 
-<div class="mt-3"></div>
-
-<!-- Banner superior -->
-<div class="alert alert-warning text-center py-2" style="max-width:900px;margin:auto;">
-    👋 ¡Hola! Bienvenido a MultaPay, el portal donde puedes consultar, pagar y mantener tus multas al día.
-</div>
-
-<!-- Card principal -->
-<div class="card shadow-sm p-4 p-md-5 mt-4" style="max-width:800px;margin:auto; border-radius:16px;">
-
-    <!-- Icono circular -->
-    <div class="mx-auto mb-4"
-         style="
-            width:70px;
-            height:70px;
-            background:#e9f0fe;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-         ">
-        <img src="{% static 'multaApp/img/lupa.png' %}" 
-                    width="48" height="48" 
-                    alt="logo" 
-                    style="object-fit:contain;">
+    <!-- Banner de bienvenida -->
+    <div class="welcome-banner">
+        <strong>👋 ¡Bienvenido a MultaPay!</strong> El portal donde puedes consultar, pagar y mantener tus multas al día.
     </div>
 
-    <h2 class="fw-bold text-center mb-2">Consulta tus multas en segundos</h2>
+    <!-- Tarjeta principal de búsqueda -->
+    <div class="search-card">
+        
+        <!-- Icono -->
+        <div class="icon-wrapper">
+            <span style="font-size: 3rem;">🔍</span>
+        </div>
 
-    <p class="text-secondary text-center mb-4">
-       <p class="text-secondary text-center mb-4">
-      Ingresa tu número de placa y verifica si tienes multas pendientes.<br>
-     No te preocupes, tus datos están protegidos 🔒
-   </p>
-
-    </p>
-
-
-
-    <!-- Formulario -->
-    <form method="get" action="{% url 'resultados_consulta' %}">
-        <input type="hidden" name="tipo" value="placa">
-
-
-        <label class="fw-bold mb-1">Número de Placa</label>
-
-        <input id="searchInput" name="q" class="form-control mb-3"
-               placeholder="Ej: ABC123 o 12345678" required>
-
-        <button type="submit"
-                class="btn btn-primary w-100 py-2 fw-bold"
-                style="border-radius:8px;font-size:1.1rem;">
-            🔎 Buscar mis multas
-        </button>
-
-        <p class="text-center mt-4">
-            <strong>Datos de ejemplo:</strong> Prueba con la placa <strong>ABC-123</strong>  
-            o el documento <strong>12345678</strong>.
+        <!-- Título -->
+        <h1 class="search-title">Consulta tus multas en segundos</h1>
+        
+        <!-- Subtítulo -->
+        <p class="search-subtitle">
+            Ingresa tu número de placa y verifica si tienes multas pendientes.<br>
+            <span style="color: #1976d2;">🔒 Tus datos están protegidos y seguros</span>
         </p>
 
-        <p class="text-center mt-3" style="font-weight: 400; color: #333;">
-         💳 Pagos seguros y verificados con entidades autorizadas ✔️
-       </p>
+        <!-- Formulario -->
+        <form method="get" action="{% url 'resultados_consulta' %}">
+            <input type="hidden" name="tipo" value="placa">
 
+            <label class="form-label">
+                🚗 Número de Placa
+            </label>
 
-    </form>
+            <input id="searchInput" 
+                   name="q" 
+                   class="form-control"
+                   placeholder="Ej: ABC-123"
+                   required
+                   autofocus>
+
+            <button type="submit" class="btn-search">
+                 Buscar mis multas
+            </button>
+        </form>
+
+        <!-- Sección de información -->
+        <div class="info-section">
+            <div class="info-box">
+                <strong>💡 Datos de ejemplo:</strong> Prueba con la placa <strong>ABC-123</strong> para ver el sistema en acción.
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-badge">✓ Consulta Gratuita</div>
+            <div class="feature-badge">💳 Pago Seguro</div>
+            <div class="feature-badge">⚡ Resultado Instantáneo</div>
+            <div class="feature-badge">🔒 100% Confidencial</div>
+        </div>
+    </div>
 
 </div>
-
 {% endblock %}

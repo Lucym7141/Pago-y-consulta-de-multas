@@ -1,32 +1,39 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Multa(models.Model):
-    ESTADOS = (
-        ("Pendiente", "Pendiente"),
-        ("Pagada", "Pagada"),
+    # NUEVO: Relación con el usuario
+    usuario = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='multas',
+        null=True,
+        blank=True
     )
-
-    numero_multa = models.CharField(max_length=50, unique=True, blank=True, null=True)
-    placa = models.CharField(max_length=15)
-    documento = models.CharField(max_length=30, null=True, blank=True)
-    conductor = models.CharField(max_length=120, null=True, blank=True)
+    
+    numero_multa = models.CharField(max_length=20, unique=True, blank=True)
+    placa = models.CharField(max_length=10)
+    conductor = models.CharField(max_length=100, null=True, blank=True)
+    documento = models.CharField(max_length=20, null=True, blank=True)
     infraccion = models.CharField(max_length=200)
     codigo = models.CharField(max_length=50, null=True, blank=True)
     fecha = models.DateField()
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
-    estado = models.CharField(max_length=10, choices=ESTADOS, default="Pendiente")
-    archivada = models.BooleanField(default=False)  # ← NUEVO CAMPO
-
-    class Meta:
-        ordering = ["-fecha"]
+    valor = models.IntegerField()
+    estado = models.CharField(max_length=20, default="Pendiente")
+    archivada = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        # Generar número de multa automáticamente si no existe
         if not self.numero_multa:
-            last = Multa.objects.order_by("-id").first()
-            next_id = (last.id + 1) if last else 1
-            self.numero_multa = f"MP-{next_id:04d}"
+            ultimo = Multa.objects.all().order_by('id').last()
+            if ultimo:
+                numero = int(ultimo.numero_multa.split('-')[1]) + 1
+            else:
+                numero = 1
+            self.numero_multa = f"MP-{numero:04d}"
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.numero_multa} — {self.placa} ({self.estado})"
+        return f"{self.numero_multa} - {self.placa}"
+
+    class Meta:
+        ordering = ['-fecha']

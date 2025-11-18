@@ -3,6 +3,6 @@ from .models import Multa
 
 @admin.register(Multa)
 class MultaAdmin(admin.ModelAdmin):
-    list_display = ("numero_multa","placa","conductor","infraccion","fecha","valor","estado")
-    list_filter = ("estado","fecha")
-    search_fields = ("placa","conductor","infraccion","codigo","documento")
+    list_display = ['numero_multa', 'placa', 'usuario', 'infraccion', 'fecha', 'valor', 'estado']
+    list_filter = ['estado', 'usuario', 'fecha']
+    search_fields = ['numero_multa', 'placa', 'conductor', 'documento']

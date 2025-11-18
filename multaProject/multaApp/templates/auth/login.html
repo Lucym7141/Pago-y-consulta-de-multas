@@ -1,146 +1,357 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Iniciar Sesión - MultaPay{% endblock %}
 
 {% block extra_styles %}
 <style>
-:root {
-    --primary-blue: #0d6efd;
-    --light-blue: #e9f1ff;
-    --dark-blue: #234d9a;
-    --white: #ffffff;
+/* Reset del body para esta página */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Animación de fondo */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: 0 0, 25px 25px;
+    animation: moveBackground 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
 }
 
 .login-container {
-    min-height: 100vh;
-    display: flex;
-}
-
-.login-left {
-    flex: 1;
-    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    min-height: calc(100vh - 200px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
-}
-
-.login-right {
-    flex: 1;
-    background: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 .login-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 1000px;
     width: 100%;
-    max-width: 400px;
+    display: flex;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Lado izquierdo - Formulario */
+.login-form-section {
+    flex: 1;
+    padding: 3rem;
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-logo img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    animation: rotate 3s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(10deg); }
 }
 
 .login-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--dark-blue);
+    color: #234d9a;
+    text-align: center;
     margin-bottom: 0.5rem;
 }
 
 .login-subtitle {
     color: #666;
+    text-align: center;
     margin-bottom: 2rem;
-    font-size: 1.1rem;
 }
 
 .form-group {
     margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .form-label {
     display: block;
-    margin-bottom: 0.5rem;
     font-weight: 600;
-    color: var(--dark-blue);
+    color: #234d9a;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
 }
 
 .form-control {
     width: 100%;
-    padding: 1rem;
+    padding: 0.9rem 1rem 0.9rem 3rem;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background: #f8f9fa;
 }
 
 .form-control:focus {
     outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    border-color: #0d6efd;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 2.8rem;
+    color: #999;
+    font-size: 1.2rem;
+}
+
+.form-control:focus ~ .input-icon {
+    color: #0d6efd;
 }
 
 .btn-login {
     width: 100%;
     padding: 1rem;
-    background: var(--primary-blue);
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
     color: white;
     border: none;
     border-radius: 10px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-login:hover::before {
+    left: 100%;
 }
 
 .btn-login:hover {
-    background: var(--dark-blue);
+    background: linear-gradient(135deg, #0b5ed7 0%, #234d9a 100%);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #999;
+    position: relative;
+    z-index: 1;
 }
 
 .signup-link {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     color: #666;
 }
 
 .signup-link a {
-    color: var(--primary-blue);
+    color: #0d6efd;
     text-decoration: none;
     font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .signup-link a:hover {
+    color: #0b5ed7;
     text-decoration: underline;
 }
 
-.welcome-section {
+/* Lado derecho - Bienvenida */
+.login-welcome-section {
+    flex: 1;
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
     text-align: center;
-    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-welcome-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: movePattern 15s linear infinite;
+}
+
+@keyframes movePattern {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 1;
+}
+
+.welcome-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
 .welcome-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: var(--dark-blue);
     margin-bottom: 1rem;
 }
 
-.welcome-subtitle {
-    font-size: 1.2rem;
-    color: #666;
+.welcome-text {
+    font-size: 1.1rem;
     line-height: 1.6;
+    opacity: 0.9;
+}
+
+.welcome-features {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.alert-danger {
+    background: #fee;
+    color: #c33;
+    border-left: 4px solid #dc3545;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .login-container {
+    .login-card {
         flex-direction: column;
     }
-    
-    .login-left {
-        padding: 3rem 1rem;
+
+    .login-welcome-section {
+        order: -1;
+        padding: 2rem;
     }
-    
+
+    .login-form-section {
+        padding: 2rem;
+    }
+
+    .welcome-icon {
+        font-size: 3rem;
+    }
+
     .welcome-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 }
 </style>
@@ -148,48 +359,83 @@
 
 {% block content %}
 <div class="login-container">
-    <!-- Left Side - Login Form -->
-    <div class="login-right">
-        <div class="login-card">
-            <h1 class="login-title">Login</h1>
-            <p class="login-subtitle">Accede a tu cuenta MultaPay</p>
+    <div class="login-card">
+        <!-- Formulario de Login -->
+        <div class="login-form-section">
+            <div class="login-logo">
+                <img src="{% static 'multaApp/img/logo.png' %}" alt="MultaPay Logo">
+            </div>
+
+            <h1 class="login-title">Bienvenido de Nuevo</h1>
+            <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
             <form method="POST">
                 {% csrf_token %}
                 
-                {% if form.errors %}
-                <div style="background: #fee; color: #c33; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border: 1px solid #fcc;">
-                    ❌ Usuario o contraseña incorrectos
-                </div>
-                {% endif %}
-
                 <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu usuario" required autofocus>
+                    <label class="form-label">Usuario</label>
+                    <input type="text" name="username" class="form-control" 
+                           placeholder="Ingresa tu usuario" required autofocus>
+                    <span class="input-icon">👤</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" name="password" class="form-control" 
+                           placeholder="Ingresa tu contraseña" required>
+                    <span class="input-icon">🔒</span>
                 </div>
 
-                <button type="submit" class="btn-login">Login</button>
+                <button type="submit" class="btn-login">
+                    🔐 Iniciar Sesión
+                </button>
             </form>
 
+            <div class="divider">
+                <span>¿No tienes cuenta?</span>
+            </div>
+
             <div class="signup-link">
-                Don't have an account? <br>
-                <a href="{% url 'signup' %}">Sign Up</a>
+                <a href="{% url 'signup' %}">✨ Crear una cuenta nueva</a>
             </div>
         </div>
-    </div>
 
-    <!-- Right Side - Welcome Message -->
-    <div class="login-left">
-        <div class="welcome-section">
-            <h2 class="welcome-title">WELCOME BACK!</h2>
-            <p class="welcome-subtitle">
-                We are happy to have you with us again. If you need anything, we are here to help.
-            </p>
+        <!-- Sección de Bienvenida -->
+        <div class="login-welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-icon">🚗</div>
+                <h2 class="welcome-title">¡Bienvenido a MultaPay!</h2>
+                <p class="welcome-text">
+                    Gestiona tus multas de tránsito de forma rápida, segura y confiable
+                </p>
+
+                <div class="welcome-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div>Consultas instantáneas</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div>Pagos seguros en línea</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div>Historial completo</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div>Soporte 24/7</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
